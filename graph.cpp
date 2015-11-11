@@ -1,14 +1,17 @@
 //Graph data structuree
 #include<iostream>
+#include<vector>
+#include<queue>
 
 class Graph
 {
 public:
-	typedef struct
+	typedef struct Edgenode
 	{
 		int y;
 		int weight;
-		struct Edgenode* next;
+		struct Graph::Edgenode* next;
+        Edgenode(int v, int edgeWeight) : y(v), weight(edgeWeight), next(nullptr) {}
 	}Edgenode;
 	
 	void readGraph(std::istream& reader)
@@ -17,7 +20,7 @@ public:
 		{
 			int x, y, weight;
 			reader >> x >> y >> weight ;
-			insertGraph(x, y, weight, mDirected);
+			insertEdge(x, y, weight, mDirected);
 		}
 	}
 
@@ -37,12 +40,12 @@ private:
 
 	void insertEdge(int x, int y, int weight, bool directed)
 	{
-		Edgenode* edge= new Edgennode(y, weight);
+		Edgenode* edge = new Graph::Edgenode(y, weight);
 		edge->next = mEdges[x];
 		mEdges[x] = edge;
 		if(directed == false)
 		{
-			insertEdge(y, x, true);
+			insertEdge(y, x, weight, true);
 		}
 		else
 		{
@@ -54,15 +57,15 @@ private:
 	//Breadth first search and helpers
 	void BFS(int start)// can start from any vertex
 	{
-		if(std::mEdges.size() == 0) return;
-		std::vector<int> discovered(std::mEdges.size(), false);
-		std::vector<int> processed(std::mEdges.size(), false );
+		if(mEdges.size() == 0) return;
+		std::vector<int> discovered(mEdges.size(), false);
+		std::vector<int> processed(mEdges.size(), false );
 
 		std::queue<int> q;
-		q.enqueue(start);
+        q.push(start);
 		while( !q.empty() )
 		{
-			int v = q.dequeue();
+            int v = q.front();
 			discovered[v]= true;
 			//processVertexEarlier(v);
 			Edgenode* edge = mEdges[v];
@@ -76,7 +79,7 @@ private:
 				}
 				if(discovered[y] == false)
 				{
-					q.enqueue(y);
+					q.push(y);
 					discovered[y] = true;
 					mBFSParents[y] = v;
 				}
@@ -95,8 +98,8 @@ private:
 
 	void DFS(int start)
 	{
-		if(mEdges.size() == 0 ) return;
-		std::stack<int> s;
+		//if(mEdges.size() == 0 ) return;
+		//std::stack<int> s;
 
 	}
 
@@ -109,3 +112,8 @@ private:
 	std::vector<int> mDFSParents;
 };
 
+//For testing
+int main()
+{
+
+}
