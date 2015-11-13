@@ -94,7 +94,11 @@ public:
             }
         }
     }
-
+	
+	void DFS(int start)//depth first search, which can start from any vertex
+	{
+		
+	}
 private:
 	void initGraph(std::istream& reader)
 	{
@@ -108,10 +112,19 @@ private:
         if (numOfVertices > 0)
         {
             mDirected = directed;
-            mEdges.resize(numOfVertices);
-            mDegree.resize(numOfVertices);
-            mBFSParents.resize(numOfVertices);
-            mDFSParents.resize(numOfVertices);
+            mEdges.resize(numOfVertices, 0);
+            mDegree.resize(numOfVertices, 0);
+            mBFSParents.resize(numOfVertices, -1);
+            
+            
+            
+            mDiscovered.resize(numOfVertices, false);	
+			mProcessed.resize(numOfVertices, false);	
+
+	
+			mDFSParents.resize(numOfVertices, -1);
+			mDFSEntryTime.resize(numOfVertices, -1);
+			mDFBExitTime.resize(numOfVertices, -1);
         }
 	}
 
@@ -148,7 +161,7 @@ private:
 
     }
 
-	void DFS(int start)
+	void DFSHelper(int start)
 	{
 		//if(mEdges.size() == 0 ) return;
 		//std::stack<int> s;
@@ -158,9 +171,16 @@ private:
 	std::vector<int> mDegree;
 	int mNumOfEdges;
 	bool mDirected;
+	
+	std::vector<bool> mDiscovered;	//<! to tell if a vertex is visited by BFS/DFS
+	std::vector<bool> mProcessed;	//<! to tell if all edges of a vertex are processed by BFS/DFS
 
-	std::vector<int> mBFSParents;
-	std::vector<int> mDFSParents;
+	std::vector<int> mBFSParents;	//<! parent data for BFS
+	
+	std::vector<int> mDFSParents;  	//<! parent data for DFS
+	std::vector<int> mDFSEntryTime;	//<! Entry time on each vertex
+	std::vector<int> mDFBExitTime;	//<! Exist time on each vertex
+	
 };
 
 //For testing
