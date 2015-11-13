@@ -64,8 +64,9 @@ public:
     void BFS(int start)// can start from any vertex
     {
         if (mEdges.size() == 0) return;
-        std::vector<int> discovered(mEdges.size(), false);
-        std::vector<int> processed(mEdges.size(), false);
+        mBFSParents.resize(numOfVertices, -1);
+        mDiscovered.resize(numOfVertices, false);	
+		mProcessed.resize(numOfVertices, false);	
 
         std::queue<int> q;
         q.push(start);
@@ -80,14 +81,14 @@ public:
             {
                 int y = edge->y;
                 //edge v-->y;
-                if (processed[y] == false || mDirected)
+                if (mProcessed[y] == false || mDirected)
                 {
                     processEdge(v, y);
                 }
-                if (discovered[y] == false)
+                if (mDiscovered[y] == false)
                 {
                     q.push(y);
-                    discovered[y] = true;
+                    mDiscovered[y] = true;
                     mBFSParents[y] = v;
                 }
                 edge = edge->next;
@@ -97,7 +98,17 @@ public:
 	
 	void DFS(int start)//depth first search, which can start from any vertex
 	{
+		if (mEdges.size() == 0) return;
 		
+        mDFSParents.resize(numOfVertices, -1);
+        mDiscovered.resize(numOfVertices, false);	
+		mProcessed.resize(numOfVertices, false);
+		mDFSEntryTime.resize(numOfVertices, -1);
+		mDFBExitTime.resize(numOfVertices, -1);
+		
+		mDFSTimeClick = 0;
+		mDiscovered[start ] = true;
+		DSFHelper(start);
 	}
 private:
 	void initGraph(std::istream& reader)
@@ -111,20 +122,9 @@ private:
         strStream >> numOfVertices >> directed;
         if (numOfVertices > 0)
         {
-            mDirected = directed;
-            mEdges.resize(numOfVertices, 0);
-            mDegree.resize(numOfVertices, 0);
-            mBFSParents.resize(numOfVertices, -1);
-            
-            
-            
-            mDiscovered.resize(numOfVertices, false);	
-			mProcessed.resize(numOfVertices, false);	
-
-	
-			mDFSParents.resize(numOfVertices, -1);
-			mDFSEntryTime.resize(numOfVertices, -1);
-			mDFBExitTime.resize(numOfVertices, -1);
+			mDirected = directed;
+			mEdges.resize(numOfVertices, 0);
+			mDegree.resize(numOfVertices, 0);
         }
 	}
 
@@ -156,15 +156,33 @@ private:
 	{
 	}
 
-    void processVertexLater()
-    {
-
-    }
+	void processVertexLater()
+	{
+	
+	}
 
 	void DFSHelper(int start)
 	{
-		//if(mEdges.size() == 0 ) return;
-		//std::stack<int> s;
+		Edgenode v = mEdges[start];
+		mDFSTimeClick++;
+		mEntryTime = mDFSTimeClick;
+		//Process vertex earlier(start)
+		while(v != nullptr)
+		{
+			if(mDiscovered[v] == false)
+			{
+				//process edge(start, v);
+				mDiscovered[v] = true;
+				mDFSParents[v] = start;
+				DFSHelper(v);
+			}
+			else if(mProcessed[start] == false || mDirected == false)
+				//process edge(start, v);
+			v = v->next;
+		}
+		//Process vertex later(start);
+		mProcessed[start] = true;
+		mExitTime = mDFSTimeClick;
 	}
 
 	std::vector<Edgenode*> mEdges;
@@ -180,6 +198,7 @@ private:
 	std::vector<int> mDFSParents;  	//<! parent data for DFS
 	std::vector<int> mDFSEntryTime;	//<! Entry time on each vertex
 	std::vector<int> mDFBExitTime;	//<! Exist time on each vertex
+	size_t			mDFSTimeClick;
 	
 };
 
