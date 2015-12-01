@@ -76,6 +76,7 @@ bool sudoku(std::vector< std::vector<int> >& data)
 void printout_sudoku(std::vector< std::vector<int> >&data)
 {
     std::cout << "SUDOKU solution:" << std::endl;
+    int i =1, j = 1;
     for(auto row :data)
     {
         std::cout << std::endl;
@@ -83,8 +84,25 @@ void printout_sudoku(std::vector< std::vector<int> >&data)
         for(auto i :row)
         {
             std::cout << i << " ";
+            if(j == 3) 
+            {
+                std::cout << " | ";
+                j = 1;
+            }
+            else
+            {
+                j++;
+            }
         }
-        std:: cout << " | ";
+        if(i == 3)
+        {
+            std::cout << std::endl;
+            i = 1;
+        }
+        else
+        {
+            i++ ;
+        }
     }
 }
 
