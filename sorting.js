@@ -9,7 +9,7 @@ function insertionSort(input){
         }
         //move data
         let m = input[i];
-        for(let k = i-1; k >=j; k-- ){
+        for(let k = i-1; k >=j; k--){
             input[k+1] = input[k];
         }
         input[j]= m;
