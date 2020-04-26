@@ -1,6 +1,6 @@
 /**
 use radix sort algorithm to sort non negative integer
-time complexity: O(k*3n) = O(k*n); memory complexity O(n+k)
+time complexity: O(digits*(n+k)) = O(k*n); k here is 10. therefore, the general time complexity is O(n). memory complexity O(n+k)
 */
 #include <vector>
 #include <algorithm>
